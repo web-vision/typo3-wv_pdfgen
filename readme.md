@@ -15,12 +15,32 @@ The extension is configured via TS only. Everything is inside the new page
 configuration `pdf`.
 
 If the preconfigured `type 100` is already in use in your installation, just
-overwrite it to your needs.
+overwrite, the constant, to your needs.
 
 Everything is configured with defaults and can be overwritten via TypoScript.
 
 Each option is documented inside the TS, just browse through it using the
 constant editor with further documentation.
+
+## RealURL
+
+We recommend to configure `EXT:realurl`, if in use as follows:
+
+    'fileName' => array(
+        'defaultToHTMLsuffixOnPrev' => 1,
+        'acceptHTMLsuffix' => 1,
+        'index' => array(
+            '.pdf' => array(
+                'keyValues' => array(
+                    'type' => 100,
+                ),
+            ),
+        ),
+    ),
+
+This configuration will allow to generate urls like
+`http://domain.tld/some-path/some-site.pdf` as pdf version of
+`http://domain.tld/some-path/some-site.html`
 
 # Security
 
@@ -30,8 +50,8 @@ Every part of the command is escaped with PHP native functionality.
 
 Anyway, take care what you configure and what is passed to the shell.
 
-Limit the configuration to admins or some respected group, as you always should
-to with TypoScript.
+Limit the configuration to administrators or some respected group, as you always
+should to with TypoScript.
 
 # Current state
 
