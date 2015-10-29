@@ -9,7 +9,7 @@ namespace WebVision\WvPdfgen\Generator;
  * of the License, or any later version.
  *
  * For the full copyright and license information, please read the
- * LICENSE file that was distributed with this source code.
+ * LICENSE.txt file that was distributed with this source code.
  *
  * The TYPO3 project - inspiring people to share!
  */
@@ -64,9 +64,9 @@ class Pdf
     protected function generatePdf()
     {
         // Build command
-        $command = escapeshellcmd($this->configuration['binary'])
-            . '  ' . escapeshellarg($this->getUrlForGeneration())
-            . '  ' . escapeshellarg($this->getFileName());
+        $command = escapeshellcmd($this->configuration['binary']) .
+            ' ' . escapeshellarg($this->getUrlForGeneration()) .
+            ' ' . escapeshellarg($this->getFileName());
 
         // Execute command
         exec($command);
