@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+     <file source-language="en" datatype="plaintext" original="messages" date="2015-07-08T16:02:54Z" product-name="wv_pdfgen">
+         <header/>
+         <body>
+             <trans-unit id="option.binary" xml:space="preserve">
+                 <source>Full absolute Path to binary:The binary to use for PDF generation on CLI. Grep it with $ which wkhtmltopdf</source>
+             </trans-unit>
+             <trans-unit id="option.type" xml:space="preserve">
+                 <source>TypeNum to use:The configured TypeNum has to be called to generate the PDF.</source>
+             </trans-unit>
+             <trans-unit id="option.urlExtension" xml:space="preserve">
+                 <source>URL Extension to remove:Extensions like realurl can map the typeNum to something else like ".pdf". Configure this, so we can use the url.</source>
+             </trans-unit>
+         </body>
+     </file>
+</xliff>

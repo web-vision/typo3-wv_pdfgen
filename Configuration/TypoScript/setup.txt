@@ -1,0 +1,21 @@
+pdf = PAGE
+pdf {
+
+    # Configure type for PDF output
+    typeNum = {$plugin.wv_pdfgen.type}
+
+    10 = USER_INT
+    10 {
+        # Use PHP Class to generate PDF
+        userFunc = WebVision\WvPdfgen\Generator\Pdf->main
+
+        # Script to call on CLI for PDF generation
+        binary = {$plugin.wv_pdfgen.binary}
+
+        # TypeNum again, to remove it from the called URL
+        typeNum < pdf.typeNum
+        # The extension to remove from url, e.g. you can configure realurl to hide the type and how ".pdf".
+        urlExtension = {$plugin.wv_pdfgen.urlExtension}
+    }
+
+}
