@@ -24,14 +24,16 @@ constant editor with further documentation.
 
 ## Add cli options
 
-Add all wkhtmltopdf options via TS in `pdf.10.cliParameters`.
-You can configure them like this:
+Add all wkhtmltopdf options via TS in `pdf.10.cliParameters`.  You can configure
+them like this:
 
     pdf.10.cliParameters {
         OPTION = VALUE
     }
 
-You can also add [stdWrap](https://docs.typo3.org/typo3cms/TyposcriptReference/Functions/Stdwrap/Index.html)s to the options like:
+You can also add
+[stdWrap](https://docs.typo3.org/typo3cms/TyposcriptReference/Functions/Stdwrap/Index.html)s
+to the options like:
 
     pdf.10.cliParameters {
         header-html = PATH_TO_HTML_FILE
@@ -40,8 +42,7 @@ You can also add [stdWrap](https://docs.typo3.org/typo3cms/TyposcriptReference/F
 
 Beware that you must not write `--` for the options.
 
-Look up the options at:
-[http://wkhtmltopdf.org/usage/wkhtmltopdf.txt]
+Look up the options at: http://wkhtmltopdf.org/usage/wkhtmltopdf.txt
 
 ## RealURL
 
