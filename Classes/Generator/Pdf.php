@@ -22,6 +22,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * This class will generate PDFs based of the current URL.
  *
  * @author Daniel Siepmann <d.siepmann@web-vision.de>
+ * @author Justus Moroni <j.moroni@web-vision.de>
  */
 class Pdf
 {
