@@ -22,6 +22,27 @@ Everything is configured with defaults and can be overwritten via TypoScript.
 Each option is documented inside the TS, just browse through it using the
 constant editor with further documentation.
 
+## Add cli options
+
+Add all wkhtmltopdf options via TS in `pdf.10.cliParameters`.
+You can configure them like this:
+
+    pdf.10.cliParameters {
+        OPTION = VALUE
+    }
+
+You can also add [stdWrap](https://docs.typo3.org/typo3cms/TyposcriptReference/Functions/Stdwrap/Index.html)s to the options like:
+
+    pdf.10.cliParameters {
+        header-html = PATH_TO_HTML_FILE
+        header-html.wrap = |.html
+    }
+
+Beware that you must not write `--` for the options.
+
+Look up the options at:
+[http://wkhtmltopdf.org/usage/wkhtmltopdf.txt]
+
 ## RealURL
 
 We recommend to configure `EXT:realurl`, if in use as follows:

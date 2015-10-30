@@ -16,14 +16,18 @@ namespace WebVision\WvPdfgen\Generator;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * This class will generate PDFs based of the current URL.
  *
  * @author Daniel Siepmann <d.siepmann@web-vision.de>
+ * @author Justus Moroni <j.moroni@web-vision.de>
  */
 class Pdf
 {
+    const CLI_PARAMETERS_KEY = 'cliParameters';
+
     /**
      * The configuration passed by TS.
      * @var array
@@ -31,9 +35,16 @@ class Pdf
     protected $configuration = array();
 
     /**
-     * Userfunction for TYPO3.
+     * The ContentObjectRenderer from TYPO3 which is added automatically.
+     * @var ContentObjectRenderer
+     */
+    public $cObj;
+
+    /**
+     * Userfunction for TYPO3. Which will generate the PDF for the current url
+     * and take $conf into account.
      *
-     * Will generate the PDF for the current url and take $conf into account.
+     * Will create an HTTP redirect instead pointing to the generated PDF.
      *
      * @see readme.md
      *
@@ -44,12 +55,10 @@ class Pdf
      */
     public function main($content, array $conf)
     {
-        $this->configuration = $conf;
-
-        // Generate PDF
+        $this->processConfiguration($conf);
         $this->generatePdf();
 
-        // Redirect to PDF in file system?
+        // Redirect to PDF in file system
         HttpUtility::redirect(
             $this->getPdfUrl(),
             HttpUtility::HTTP_STATUS_301
@@ -59,17 +68,16 @@ class Pdf
     /**
      * Generate the PDF and persist it in Filesystem
      *
-     * @return WebVision\WvPdfgen\Generator\Pdf The current instance for chaining.
+     * @return Pdf
      */
     protected function generatePdf()
     {
-        // Build command
-        $command = escapeshellcmd($this->configuration['binary']) .
-            ' ' . escapeshellarg($this->getUrlForGeneration()) .
-            ' ' . escapeshellarg($this->getFileName());
+        $command = $this->configuration['binary'] .
+            $this->getCliParameter() .
+            ' ' . $this->getUrlForGeneration() .
+            ' ' . $this->getFileName();
 
-        // Execute command
-        exec($command);
+        exec(escapeshellcmd($command));
 
         return $this;
     }
@@ -81,11 +89,9 @@ class Pdf
      */
     protected function getFileName()
     {
-        // Define / Generate paths
         $folderPath = PATH_site . 'typo3temp/gen_pdfs/';
         $fileName = md5($this->getUrlForGeneration()) . '.pdf';
 
-        // Create folder if it doesn't exist yet. (=> TEMP folder)
         GeneralUtility::mkdir_deep($folderPath);
 
         return $folderPath . $fileName;
@@ -119,6 +125,65 @@ class Pdf
 
         // Remove url extension like ".pdf" as it's realurl rewriting the type.
         return str_ireplace($this->configuration['urlExtension'], '', $urlToConvert);
+    }
+
+    /**
+     * Get cli parameter to include while PDF generation.
+     *
+     * @return string
+     */
+    protected function getCliParameter()
+    {
+        $cliParameter = '';
+
+        foreach ($this->configuration[static::CLI_PARAMETERS_KEY] as $key => $value) {
+            $cliParameter .= ' --' . $key . ' ' . $value;
+        }
+
+        return $cliParameter;
+    }
+
+    /**
+     * Will parse the given configuration and save the processed configuration.
+     *
+     * Empty options will be ignored.
+     *
+     * @param array $configuration The original configuration passed in.
+     *
+     * @return Pdf
+     */
+    protected function processConfiguration(array $configuration)
+    {
+        $configuration = array_filter($configuration);
+
+        // Process only the 1st level of configuration
+        foreach ($configuration as $key => $value) {
+            if (strpos($key, '.')) {
+                continue;
+            }
+
+            $this->configuration[$key] = $value;
+        }
+
+        // Process only the cli parameter configuration
+        foreach ($configuration[static::CLI_PARAMETERS_KEY . '.'] as $key => $value) {
+            // Don't process sub array with further configuration, this is done
+            // by stdWrap
+            if (strpos($key, '.') === (strlen($key) - 1)) {
+                continue;
+            }
+
+            $this->configuration[static::CLI_PARAMETERS_KEY][$key] = $value;
+
+            // Process stdWrap if sub array exists.
+            if (isset($configuration[$key . '.']) && is_array($configuration[$key . '.'])) {
+                $this->configuration[static::CLI_PARAMETERS_KEY][$key] = trim(
+                    $this->cObj->stdWrap($configuration[$key], $configuration[$key . '.'])
+                );
+            }
+        }
+
+        return $this;
     }
 
     /**
