@@ -158,7 +158,7 @@ class Pdf
 
         // Process only the 1st level of configuration
         foreach ($configuration as $key => $value) {
-            if(strpos($key, '.')) {
+            if (strpos($key, '.')) {
                 continue;
             }
 
@@ -166,17 +166,17 @@ class Pdf
         }
 
         // Process only the cli parameter configuration
-        foreach($configuration[static::CLI_PARAMETERS_KEY . '.'] as $key => $value) {
+        foreach ($configuration[static::CLI_PARAMETERS_KEY . '.'] as $key => $value) {
             // Don't process sub array with further configuration, this is done
             // by stdWrap
-            if(strpos($key, '.') === (strlen($key) - 1)) {
+            if (strpos($key, '.') === (strlen($key) - 1)) {
                 continue;
             }
 
             $this->configuration[static::CLI_PARAMETERS_KEY][$key] = $value;
 
             // Process stdWrap if sub array exists.
-            if(isset($configuration[$key . '.']) && is_array($configuration[$key . '.'])) {
+            if (isset($configuration[$key . '.']) && is_array($configuration[$key . '.'])) {
                 $this->configuration[static::CLI_PARAMETERS_KEY][$key] = trim(
                     $this->cObj->stdWrap($configuration[$key], $configuration[$key . '.'])
                 );
