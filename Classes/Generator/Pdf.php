@@ -25,6 +25,8 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class Pdf
 {
+    const CLI_PARAMETERS_KEY = 'cliParameters';
+
     /**
      * The configuration passed by TS.
      * @var array
@@ -53,11 +55,9 @@ class Pdf
     public function main($content, array $conf)
     {
         $this->processConfiguration($conf);
-
-        // Generate PDF
         $this->generatePdf();
 
-        // Redirect to PDF in file system?
+        // Redirect to PDF in file system
         HttpUtility::redirect(
             $this->getPdfUrl(),
             HttpUtility::HTTP_STATUS_301
@@ -71,13 +71,12 @@ class Pdf
      */
     protected function generatePdf()
     {
-        // Build command
-        $command = escapeshellcmd($this->configuration['binary']) .
+        $command = $this->configuration['binary'] .
             $this->getCliParameter() .
-            ' ' . escapeshellarg($this->getUrlForGeneration()) .
-            ' ' . escapeshellarg($this->getFileName());
+            ' ' . $this->getUrlForGeneration() .
+            ' ' . $this->getFileName();
 
-        exec($command);
+        exec(escapeshellcmd($command));
 
         return $this;
     }
@@ -89,11 +88,9 @@ class Pdf
      */
     protected function getFileName()
     {
-        // Define / Generate paths
         $folderPath = PATH_site . 'typo3temp/gen_pdfs/';
         $fileName = md5($this->getUrlForGeneration()) . '.pdf';
 
-        // Create folder if it doesn't exist yet. (=> TEMP folder)
         GeneralUtility::mkdir_deep($folderPath);
 
         return $folderPath . $fileName;
@@ -138,7 +135,7 @@ class Pdf
     {
         $cliParameter = '';
 
-        foreach ($this->configuration['cliparameter'] as $key => $value) {
+        foreach ($this->configuration[static::CLI_PARAMETERS_KEY] as $key => $value) {
             $cliParameter .= ' --' . $key . ' ' . $value;
         }
 
@@ -152,12 +149,13 @@ class Pdf
      *
      * @param array $configuration The original configuration passed in.
      *
-     * @return PDF
+     * @return Pdf
      */
     protected function processConfiguration(array $configuration)
     {
         $configuration = array_filter($configuration);
 
+        // Process only the 1st level of configuration
         foreach ($configuration as $key => $value) {
             if(strpos($key, '.')) {
                 continue;
@@ -166,20 +164,19 @@ class Pdf
             $this->configuration[$key] = $value;
         }
 
-        $configuration = $configuration['cliparameter.'];
-
-        foreach($configuration as $key => $value) {
+        // Process only the cli parameter configuration
+        foreach($configuration[static::CLI_PARAMETERS_KEY . '.'] as $key => $value) {
             // Don't process sub array with further configuration, this is done
             // by stdWrap
             if(strpos($key, '.') === (strlen($key) - 1)) {
                 continue;
             }
 
-            $this->configuration['cliparameter'][$key] = $value;
+            $this->configuration[static::CLI_PARAMETERS_KEY][$key] = $value;
 
             // Process stdWrap if sub array exists.
             if(isset($configuration[$key . '.']) && is_array($configuration[$key . '.'])) {
-                $this->configuration['cliparameter'][$key] = trim(
+                $this->configuration[static::CLI_PARAMETERS_KEY][$key] = trim(
                     $this->cObj->stdWrap($configuration[$key], $configuration[$key . '.'])
                 );
             }
