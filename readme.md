@@ -31,17 +31,17 @@ You can configure them like this:
         OPTION = VALUE
     }
 
-You can also add stdWraps to the options like:
+You can also add [stdWrap](https://docs.typo3.org/typo3cms/TyposcriptReference/Functions/Stdwrap/Index.html)s to the options like:
 
     pdf.10.cliParameters {
         header-html = PATH_TO_HTML_FILE
         header-html.wrap = |.html
     }
 
-Beware that you must not write `--` with the options.
+Beware that you must not write `--` for the options.
 
 Look up the options at:
-`http://wkhtmltopdf.org/usage/wkhtmltopdf.txt`
+[http://wkhtmltopdf.org/usage/wkhtmltopdf.txt]
 
 ## RealURL
 
