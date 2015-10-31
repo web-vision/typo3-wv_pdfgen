@@ -39,7 +39,8 @@ class UrlUtility
             array(),
             $responseHeader
         );
-        return ($responseHeader['http_code'] === '200');
+
+        return ($responseHeader['http_code'] === 200);
     }
 
     /**
@@ -61,7 +62,7 @@ class UrlUtility
         $filteredUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . $parsedUrl['path'];
         $urlQuery = array_filter(
             explode('&', $parsedUrl['query']),
-            function ($queryParameter) {
+            function ($queryParameter) use ($parameterName) {
                 list($parameterName) = explode('=', $queryParameter);
                 if(!in_array($parameterName, $parameterWhitelist)) {
                     return false;

@@ -12,6 +12,9 @@
             <trans-unit id="option.urlExtension" xml:space="preserve">
                 <source>URL Extension to remove:Extensions like realurl can map the typeNum to something else like ".pdf". Configure this, so we can use the url.</source>
             </trans-unit>
+            <trans-unit id="option.parameterWhitelist" xml:space="preserve">
+                <source>List of allowd url parameters:All others are removed for security.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

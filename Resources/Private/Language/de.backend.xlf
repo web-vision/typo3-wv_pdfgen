@@ -15,6 +15,10 @@
                 <source>URL Extension to remove:Extensions like realurl can map the typeNum to something else like ".pdf". Configure this, so we can use the url.</source>
                 <target>Url-Erweiterung zum entfernen:Extensions wie realurl ermöglichen das umschreiben des type-Parameter zu z.B. ".pdf". Damit die korrekte URL genutzt werden kann muss dies angegeben werden.</target>
             </trans-unit>
+            <trans-unit id="option.parameterWhitelist" xml:space="preserve">
+                <source>List of allowd url parameters:All others are removed for security.</source>
+                <target>Liste mit erlaubten URL-Parametern:Alle anderen Parameter werden während des Aufrufs aus Sicherheitsgründen entfernt.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
