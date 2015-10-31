@@ -5,9 +5,15 @@ Provide an easy way to generate a PDF for any page you have.
 # Setup
 
 Install the extension as usual. Include the static TypoScript where you need
-paged to be generated as PDF.
+pages to be generated as PDF.
 
-Call the given page with the configured `type=` parameter.
+## Enable use of CURL
+
+Please activate the use of curl in TYPO3 `'curlUse' => '1'`. The extension will
+check the provided urls for availability and deliver a 404 if the url is not
+valid.
+
+If the option is not set, the extension won't work.
 
 # Configuration
 
@@ -64,6 +70,11 @@ This configuration will allow to generate urls like
 `http://domain.tld/some-path/some-site.pdf` as pdf version of
 `http://domain.tld/some-path/some-site.html`
 
+# Usage
+
+Call the page, which should be delivered as PDF, with the configured `type=`
+parameter.
+
 # Security
 
 This extension will do a system call to generate the PDFs. While doing so, some
@@ -86,7 +97,3 @@ if you don't remove old ones.
 We will add such things later, but most of them are very easy to extend. So do
 it your own and bring back the efforts to others. Send in Pull Requests /
 patches to the author
-
-We will add such things later, but most of them are very easy to extend. So do
-it your own and bring back the efforts to others. Send in Pull Requests /
-patches to the author.

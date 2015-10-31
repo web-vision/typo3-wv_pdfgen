@@ -6,4 +6,7 @@ plugin.wv_pdfgen {
     type = 100
     # cat=plugin.tx_wv_pdfgen; type=string; label=LLL:EXT:wv_pdfgen/Resources/Private/Language/Backend.xlf:option.urlExtension
     urlExtension = .pdf
+
+    # cat=plugin.tx_wv_pdfgen; type=string; label=LLL:EXT:wv_pdfgen/Resources/Private/Language/Backend.xlf:option.parameterWhitelist
+    parameterWhitelist = cHash, L, id
 }

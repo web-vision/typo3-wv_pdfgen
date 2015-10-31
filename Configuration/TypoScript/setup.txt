@@ -1,6 +1,5 @@
 pdf = PAGE
 pdf {
-
     # Configure type for PDF output
     typeNum = {$plugin.wv_pdfgen.type}
 
@@ -16,6 +15,8 @@ pdf {
         typeNum < pdf.typeNum
         # The extension to remove from url, e.g. you can configure realurl to hide the type and how ".pdf".
         urlExtension = {$plugin.wv_pdfgen.urlExtension}
-    }
 
+        # List of parameters that are kept during PDF generation.
+        parameterWhitelist = {$plugin.wv_pdfgen.parameterWhitelist}
+    }
 }

@@ -14,6 +14,7 @@ namespace WebVision\WvPdfgen\Generator;
  * The TYPO3 project - inspiring people to share!
  */
 
+use WebVision\WvPdfgen\Utility\UrlUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -41,6 +42,11 @@ class Pdf
     public $cObj;
 
     /**
+     * @var UrlUtility
+     */
+    protected $urlUtility;
+
+    /**
      * Userfunction for TYPO3. Which will generate the PDF for the current url
      * and take $conf into account.
      *
@@ -55,7 +61,13 @@ class Pdf
      */
     public function main($content, array $conf)
     {
+        $this->urlUtility = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager')
+            ->get('WebVision\WvPdfgen\Utility\UrlUtility');
         $this->processConfiguration($conf);
+
+        if(!$this->urlUtility->urlAvailable($this->getUrlForGeneration())) {
+            $GLOBALS['TSFE']->pageNotFoundAndExit();
+        }
         $this->generatePdf();
 
         // Redirect to PDF in file system
@@ -106,7 +118,7 @@ class Pdf
      */
     protected function getPdfUrl()
     {
-        return $this->getDomain() . str_replace(PATH_site, '', $this->getFileName());
+        return $this->urlUtility->getDomain() . str_replace(PATH_site, '', $this->getFileName());
     }
 
     /**
@@ -118,7 +130,10 @@ class Pdf
      */
     protected function getUrlForGeneration()
     {
-        $urlToConvert = $this->getDomain() . $GLOBALS['TSFE']->siteScript;
+        $urlToConvert = $this->urlUtility->filterUrl(
+            $this->urlUtility->getDomain() . $GLOBALS['TSFE']->siteScript,
+            $this->configuration['parameterWhitelist']
+        );
 
         // Remove type parameter to generate the real url, not the PDF (= endless loop)
         $urlToConvert = str_ireplace('type=' . $this->configuration['typeNum'], '', $urlToConvert);
@@ -163,6 +178,10 @@ class Pdf
             }
 
             $this->configuration[$key] = $value;
+
+            if($key === 'parameterWhitelist') {
+                $this->configuration[$key] = GeneralUtility::trimExplode(',', $value);
+            }
         }
 
         // Process only the cli parameter configuration
@@ -184,15 +203,5 @@ class Pdf
         }
 
         return $this;
-    }
-
-    /**
-     * Get the current active domain, with protocol.
-     *
-     * @return string
-     */
-    protected function getDomain()
-    {
-        return GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
     }
 }
