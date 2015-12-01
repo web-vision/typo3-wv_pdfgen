@@ -151,6 +151,10 @@ class Pdf
     {
         $cliParameter = '';
 
+        if ($this->configuration[static::CLI_PARAMETERS_KEY . '.'] === null) {
+            return $cliParameter;
+        }
+
         foreach ($this->configuration[static::CLI_PARAMETERS_KEY] as $key => $value) {
             $cliParameter .= ' --' . $key . ' ' . $value;
         }
@@ -182,6 +186,10 @@ class Pdf
             if($key === 'parameterWhitelist') {
                 $this->configuration[$key] = GeneralUtility::trimExplode(',', $value);
             }
+        }
+
+        if ($configuration[static::CLI_PARAMETERS_KEY . '.'] === null) {
+            return $this;
         }
 
         // Process only the cli parameter configuration
