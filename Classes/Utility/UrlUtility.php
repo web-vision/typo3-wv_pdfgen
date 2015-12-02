@@ -53,16 +53,15 @@ class UrlUtility
      */
     public function filterUrl($urlToFilter, array $parameterWhitelist)
     {
-        $filteredUrl = '';
+        $filteredUrl = substr($urlToFilter, 0, strpos($urlToFilter, '?'));
         $parsedUrl = parse_url($urlToFilter);
         if(!isset($parsedUrl['query'])) {
             return $urlToFilter;
         }
 
-        $filteredUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . $parsedUrl['path'];
         $urlQuery = array_filter(
             explode('&', $parsedUrl['query']),
-            function ($queryParameter) use ($parameterName) {
+            function ($queryParameter) use ($parameterWhitelist) {
                 list($parameterName) = explode('=', $queryParameter);
                 if(!in_array($parameterName, $parameterWhitelist)) {
                     return false;
