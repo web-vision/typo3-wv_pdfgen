@@ -185,7 +185,8 @@ class Pdf
         }
 
         // Process only the cli parameter configuration
-        foreach ($configuration[static::CLI_PARAMETERS_KEY . '.'] as $key => $value) {
+        $this->configuration[static::CLI_PARAMETERS_KEY] = array();
+        foreach ((array) $configuration[static::CLI_PARAMETERS_KEY . '.'] as $key => $value) {
             // Don't process sub array with further configuration, this is done
             // by stdWrap
             if (strpos($key, '.') === (strlen($key) - 1)) {
