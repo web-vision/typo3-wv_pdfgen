@@ -33,7 +33,7 @@ class Pdf
      * The configuration passed by TS.
      * @var array
      */
-    protected $configuration = array();
+    protected $configuration = [];
 
     /**
      * The ContentObjectRenderer from TYPO3 which is added automatically.
@@ -185,7 +185,7 @@ class Pdf
         }
 
         // Process only the cli parameter configuration
-        $this->configuration[static::CLI_PARAMETERS_KEY] = array();
+        $this->configuration[static::CLI_PARAMETERS_KEY] = [];
         foreach ((array) $configuration[static::CLI_PARAMETERS_KEY . '.'] as $key => $value) {
             // Don't process sub array with further configuration, this is done
             // by stdWrap
