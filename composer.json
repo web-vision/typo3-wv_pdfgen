@@ -1,0 +1,28 @@
+{
+    "name": "web-vision/wv_pdfgen",
+    "type": "typo3-cms-extension",
+    "description": "Will generate a PDF version of any page using wkhtmltopdf.",
+    "homepage": "http://web-vision.de",
+    "license": ["GPL-2.0+"],
+    "authors": [
+        {
+            "name": "Daniel Siepmann",
+            "email": "d.siepmann@web-vision.de",
+            "role": "lead"
+        },
+        {
+            "name": "Justus Moroni",
+            "email": "j.moroni@web-vision.de",
+            "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/web-vision/typo3-wv_pdfgen/issues",
+        "source": "https://github.com/web-vision/typo3-wv_pdfgen"
+    },
+    "autoload": {
+        "psr-4": {
+            "WebVision\\WvCore\\": "Classes"
+        }
+    }
+}
