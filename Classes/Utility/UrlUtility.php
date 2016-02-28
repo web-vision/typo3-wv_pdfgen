@@ -32,11 +32,11 @@ class UrlUtility
      */
     public function urlAvailable($urlToCheck)
     {
-        $responseHeader = array();
+        $responseHeader = [];
         GeneralUtility::getUrl(
             $urlToCheck,
             2,
-            array(),
+            [],
             $responseHeader
         );
 
